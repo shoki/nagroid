@@ -67,19 +67,23 @@ public class HealthState {
 			String uriDefault = "android.resource://de.schoar.nagroid/raw/hostdown";
 			soundUri = toSoundUri(uriSelected, uriDefault);
 		}
-		mSoundUri = soundUri;
-
+		
 		StringBuffer sb = new StringBuffer();
 		sb.append("de.schoar.nagroid:drawable/state");
 		if (mPollingSuccessfull) {
 			sb.append("_ok");
 		} else {
 			sb.append("_error");
-			// XXX, alarm, we can't update state, nagios down?
-			String uriSelected = DM.I.getConfiguration().getNotificationAlarmPollFailure();
-			String uriDefault = "android.resource://de.schoar.nagroid/raw/hostdown";
-			mSoundUri = toSoundUri(uriSelected, uriDefault);
+			// alarm, we can't update state, nagios down?
+			if (DM.I.getConfiguration().getPollingEnabled() && DM.I.getConfiguration().getNotificationAlarmEnabled()) {
+				String uriSelected = DM.I.getConfiguration().getNotificationAlarmPollFailure();
+				String uriDefault = "android.resource://de.schoar.nagroid/raw/hostdown";
+				soundUri = toSoundUri(uriSelected, uriDefault);
+			}
 		}
+		
+		mSoundUri = soundUri;
+
 		sb.append("_" + mStateHosts.toColorStrNoHash().toLowerCase());
 		sb.append("_" + mStateServices.toColorStrNoHash().toLowerCase());
 		mResourceId = sb.toString();

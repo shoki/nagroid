@@ -15,7 +15,7 @@ import de.schoar.nagroid.ConfigurationAccess;
 
 public class NagroidLog {
 	private static final String LOGT = "NagroidLog";
-	private static final int LOG_SIZE = 15;
+	private static final int LOG_SIZE = 150;
 
 	private final SimpleDateFormat mSdf = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");

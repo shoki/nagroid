@@ -68,7 +68,7 @@ public class DM {
 
 		mHealthNotificationHelper.updateNagiosState(mContext,
 				NagiosState.HOST_LOCAL_ERROR, NagiosState.SERVICE_LOCAL_ERROR,
-				false);
+				true);
 		mNagroidLog
 				.addLogWithTime("Restored nagios state (not implemented yet). On next poll everything will be fine again.");
 
