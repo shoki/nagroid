@@ -9,9 +9,8 @@
 		android:textStyle="bold" />
 
 	<TextView android:id="@+id/problemsTvLast"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:gravity="center_horizontal" android:textSize="12px"
-		android:textStyle="bold" />
+		android:layout_width="fill_parent" android:gravity="center_horizontal" android:textSize="12px"
+		android:textStyle="bold" android:layout_height="28dp"/>
 
 	<ListView android:id="@+id/problemsLstProblems"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
