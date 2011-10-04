@@ -37,25 +37,20 @@
 			android:title="Hide If Ok" android:summary="Hide icon if everything is ok" />
 		<CheckBoxPreference android:key="configuration_notification_alarm_enabled"
 			android:title="Enable Alarms" android:summary="Play sounds on problem" />
-		<RingtonePreference 
-			android:key="configuration_notification_alarm_warning" android:title="Alarm On Warning"
-			android:ringtoneType="all"/>
-		<RingtonePreference 
-			android:key="configuration_notification_alarm_critical" android:title="Alarm On Critical"
-			android:ringtoneType="all"/>
-		<RingtonePreference 
-			android:key="configuration_notification_alarm_down_unreachable" android:title="Alarm On Down/Unr."
-			android:ringtoneType="all"/>
-		<RingtonePreference 
-			android:key="configuration_notification_alarm_poll_failure" android:title="Alarm On Poll Fail"
-			android:ringtoneType="all"/>
-		
+		<CheckBoxPreference android:key="configuration_notification_alarm_warning"
+			android:summary="Alarm On Warning" android:title="Enable Warning Alarm"/>
+		<CheckBoxPreference android:key="configuration_notification_alarm_critical"
+			android:summary="Alarm On Critical" android:title="Enable Critical Alarm"/>
+		<CheckBoxPreference android:key="configuration_notification_alarm_down_unreachable"
+			android:summary="Alarm On Host/Unr." android:title="Enable Host Down Alarm"/>
+		<CheckBoxPreference android:key="configuration_notification_alarm_poll_failure"
+			android:summary="Alarm On Poll Failure" android:title="Enable Poll Failure Alarm"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="Misc">
 		<CheckBoxPreference android:key="configuration_misc_autostart"
 			android:title="Autostart" android:summary="Autostart Nagroid after reboot" />
-		<TimePickerPreference android:summary="Snooze until this time in the morning" android:title="Snooze time" android:key="configuration_misc_snoozetime" android:defaultValue="9:00"/>
+		<TimePickerPreference android:summary="Snooze until this time in the morning" android:defaultValue="9:00" android:title="Snooze time" android:key="configuration_misc_snoozetime"/>
 	</PreferenceCategory>
 
 </PreferenceScreen>

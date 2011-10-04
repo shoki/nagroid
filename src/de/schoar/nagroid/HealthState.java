@@ -1,8 +1,7 @@
 package de.schoar.nagroid;
 
-import android.net.Uri;
-import android.provider.Settings;
 import de.schoar.nagroid.nagios.NagiosState;
+import de.schoar.nagroid.notification.HealthNotificationHelper;
 
 public class HealthState {
 	private boolean mPollingSuccessfull;
@@ -11,8 +10,9 @@ public class HealthState {
 
 	private String mText;
 	private long mVibrate[];
-	private Uri mSoundUri;
 	private String mResourceId;
+	
+	private int mSoundId;
 
 	public HealthState(boolean pollingSuccessfull, NagiosState stateHosts,
 			NagiosState stateServices) {
@@ -20,6 +20,7 @@ public class HealthState {
 		mPollingSuccessfull = pollingSuccessfull;
 		mStateHosts = stateHosts;
 		mStateServices = stateServices;
+		
 		init();
 	}
 
@@ -47,25 +48,19 @@ public class HealthState {
 		mVibrate = vibrate;
 		mText = text;
 
-		Uri soundUri = null;
-		if (NagiosState.SERVICE_WARNING.equals(mStateServices)) {
-			String uriSelected = DM.I.getConfiguration()
-					.getNotificationAlarmWarning();
-			String uriDefault = "android.resource://de.schoar.nagroid/raw/warning";
-			soundUri = toSoundUri(uriSelected, uriDefault);
+		int soundId = 0;
+		if (NagiosState.SERVICE_WARNING.equals(mStateServices)
+				&& DM.I.getConfiguration().getNotificationAlarmWarning()) {
+			soundId = HealthNotificationHelper.SOUND_WARNING;
 		}
-		if (NagiosState.SERVICE_CRITICAL.equals(mStateServices)) {
-			String uriSelected = DM.I.getConfiguration()
-					.getNotificationAlarmCritical();
-			String uriDefault = "android.resource://de.schoar.nagroid/raw/critical";
-			soundUri = toSoundUri(uriSelected, uriDefault);
+		if (NagiosState.SERVICE_CRITICAL.equals(mStateServices)
+				&& DM.I.getConfiguration().getNotificationAlarmCritical()) { 
+			soundId = HealthNotificationHelper.SOUND_CRITICAL;
 		}
-		if (NagiosState.HOST_DOWN.equals(mStateHosts)
-				|| NagiosState.HOST_UNREACHABLE.equals(mStateHosts)) {
-			String uriSelected = DM.I.getConfiguration()
-					.getNotificationAlarmDownUnreachable();
-			String uriDefault = "android.resource://de.schoar.nagroid/raw/hostdown";
-			soundUri = toSoundUri(uriSelected, uriDefault);
+		if ((NagiosState.HOST_DOWN.equals(mStateHosts)
+				|| NagiosState.HOST_UNREACHABLE.equals(mStateHosts))
+				&& DM.I.getConfiguration().getNotificationAlarmDownUnreachable()) { 
+			soundId = HealthNotificationHelper.SOUND_HOSTDOWN;
 		}
 		
 		StringBuffer sb = new StringBuffer();
@@ -75,14 +70,14 @@ public class HealthState {
 		} else {
 			sb.append("_error");
 			// alarm, we can't update state, nagios down?
-			if (DM.I.getConfiguration().getPollingEnabled() && DM.I.getConfiguration().getNotificationAlarmEnabled()) {
-				String uriSelected = DM.I.getConfiguration().getNotificationAlarmPollFailure();
-				String uriDefault = "android.resource://de.schoar.nagroid/raw/hostdown";
-				soundUri = toSoundUri(uriSelected, uriDefault);
+			if (DM.I.getConfiguration().getPollingEnabled() && DM.I.getConfiguration().getNotificationAlarmEnabled()
+					&& DM.I.getConfiguration().getNotificationAlarmPollFailure()) {
+				// XXX: set to POLLFAILURE 
+				soundId = HealthNotificationHelper.SOUND_HOSTDOWN;
 			}
 		}
 		
-		mSoundUri = soundUri;
+		mSoundId = soundId;
 
 		sb.append("_" + mStateHosts.toColorStrNoHash().toLowerCase());
 		sb.append("_" + mStateServices.toColorStrNoHash().toLowerCase());
@@ -150,24 +145,7 @@ public class HealthState {
 		return mResourceId;
 	}
 
-	public Uri getSoundUri() {
-		return mSoundUri;
-	}
-
-	private Uri toSoundUri(String soundUri, String defaultUri) {
-		if (soundUri == null) {
-			return null;
-		}
-		if (soundUri.length() == 0) {
-			return null;
-		}
-		if (Settings.System.DEFAULT_RINGTONE_URI.toString().equals(soundUri)) {
-			return Uri.parse(defaultUri);
-		}
-		if (Settings.System.DEFAULT_NOTIFICATION_URI.toString()
-				.equals(soundUri)) {
-			return Uri.parse(defaultUri);
-		}
-		return Uri.parse(soundUri);
+	public int getSoundId() {
+		return mSoundId;
 	}
 }

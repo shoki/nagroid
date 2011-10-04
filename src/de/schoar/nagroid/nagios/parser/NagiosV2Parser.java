@@ -2,7 +2,6 @@ package de.schoar.nagroid.nagios.parser;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.w3c.dom.Document;

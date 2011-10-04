@@ -1,17 +1,13 @@
 package de.schoar.nagroid.activity;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.RingtonePreference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,7 +17,6 @@ import de.schoar.nagroid.DefaultMenu;
 import de.schoar.nagroid.R;
 
 public class ConfigurationActivity extends PreferenceActivity {
-	private static final String LOGT = "ConfigurationActivity";
 	private static final String UNSET = "(unset)";
 
 	@Override
@@ -291,59 +286,80 @@ public class ConfigurationActivity extends PreferenceActivity {
 
 		// -----
 
-		final RingtonePreference rpWarning = (RingtonePreference) findPreference(ConfigurationAccess.NOTIFICATION_ALARM_WARNING);
-		String rpWarningUri = DM.I.getConfiguration()
+		final CheckBoxPreference cbpWarning = (CheckBoxPreference) findPreference(ConfigurationAccess.NOTIFICATION_ALARM_WARNING);
+		boolean cbpNotificationAlarmWarning = DM.I.getConfiguration()
 				.getNotificationAlarmWarning();
-		rpWarning.setSummary(alarmText(rpWarningUri, "warning"));
-		rpWarning
+		cbpWarning.setChecked(cbpNotificationAlarmWarning);
+		
+		cbpWarning
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					@Override
 					public boolean onPreferenceChange(Preference pref,
 							Object obj) {
-						String uristr = obj.toString();
+						Boolean bool = (Boolean) obj;
 						DM.I.getConfiguration().setNotificationAlarmWarning(
-								uristr);
-						rpWarning.setSummary(alarmText(uristr, "warning"));
+								bool);
+						cbpWarning.setChecked(bool);
 						return false;
 					}
 				});
 
 		// -----
 
-		final RingtonePreference rpCritical = (RingtonePreference) findPreference(ConfigurationAccess.NOTIFICATION_ALARM_CRITICAL);
-		String rpCriticalUri = DM.I.getConfiguration()
+		final CheckBoxPreference cbpCritical = (CheckBoxPreference) findPreference(ConfigurationAccess.NOTIFICATION_ALARM_CRITICAL);
+		boolean cbpNotificationAlarmCritical = DM.I.getConfiguration()
 				.getNotificationAlarmCritical();
-		rpCritical.setSummary(alarmText(rpCriticalUri, "critical"));
-		rpCritical
+		cbpCritical.setChecked(cbpNotificationAlarmCritical);
+		
+		cbpCritical
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					@Override
 					public boolean onPreferenceChange(Preference pref,
 							Object obj) {
-						String uristr = obj.toString();
+						Boolean bool = (Boolean) obj;
 						DM.I.getConfiguration().setNotificationAlarmCritical(
-								uristr);
-						rpCritical.setSummary(alarmText(uristr, "critical"));
+								bool);
+						cbpCritical.setChecked(bool);
 						return false;
 					}
 				});
 
 		// -----
 
-		final RingtonePreference rpDownUnreachable = (RingtonePreference) findPreference(ConfigurationAccess.NOTIFICATION_ALARM_DOWN_UNREACHABLE);
-		String rpDownUnreachableUri = DM.I.getConfiguration()
+		final CheckBoxPreference cbpDownUnreachable = (CheckBoxPreference) findPreference(ConfigurationAccess.NOTIFICATION_ALARM_DOWN_UNREACHABLE);
+		boolean cbpNotificationAlarmDownUnreachable = DM.I.getConfiguration()
 				.getNotificationAlarmDownUnreachable();
-		rpDownUnreachable.setSummary(alarmText(rpDownUnreachableUri,
-				"down/unreachable"));
-		rpDownUnreachable
+		cbpDownUnreachable.setChecked(cbpNotificationAlarmDownUnreachable);
+		
+		cbpDownUnreachable
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					@Override
 					public boolean onPreferenceChange(Preference pref,
 							Object obj) {
-						String uristr = obj.toString();
+						Boolean bool = (Boolean) obj;
 						DM.I.getConfiguration()
-								.setNotificationAlarmDownUnreachable(uristr);
-						rpDownUnreachable.setSummary(alarmText(uristr,
-								"down/unreachable"));
+								.setNotificationAlarmDownUnreachable(bool);
+						cbpDownUnreachable.setChecked(bool);
+						return false;
+					}
+				});
+
+		// -----
+		
+		final CheckBoxPreference cbpPollFailure = (CheckBoxPreference) findPreference(ConfigurationAccess.NOTIFICATION_ALARM_POLL_FAILURE);
+		boolean cbpNotificationAlarmPollFailure = DM.I.getConfiguration()
+				.getNotificationAlarmPollFailure();
+		cbpPollFailure.setChecked(cbpNotificationAlarmPollFailure);
+		
+		cbpPollFailure
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference pref,
+							Object obj) {
+						Boolean bool = (Boolean) obj;
+						DM.I.getConfiguration()
+								.setNotificationAlarmPollFailure(bool);
+						cbpPollFailure.setChecked(bool);
 						return false;
 					}
 				});
@@ -356,9 +372,10 @@ public class ConfigurationActivity extends PreferenceActivity {
 		cbpNotificationAlarmEnabled
 				.setChecked(cbpNotificationAlarmEnabledChecked);
 
-		rpWarning.setEnabled(cbpNotificationAlarmEnabledChecked);
-		rpCritical.setEnabled(cbpNotificationAlarmEnabledChecked);
-		rpDownUnreachable.setEnabled(cbpNotificationAlarmEnabledChecked);
+		cbpWarning.setEnabled(cbpNotificationAlarmEnabledChecked);
+		cbpCritical.setEnabled(cbpNotificationAlarmEnabledChecked);
+		cbpDownUnreachable.setEnabled(cbpNotificationAlarmEnabledChecked);
+		cbpPollFailure.setEnabled(cbpNotificationAlarmEnabledChecked);
 
 		cbpNotificationAlarmEnabled
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -368,9 +385,10 @@ public class ConfigurationActivity extends PreferenceActivity {
 						Boolean bool = (Boolean) obj;
 						DM.I.getConfiguration().setNotificationAlarmEnabled(
 								bool);
-						rpWarning.setEnabled(bool);
-						rpCritical.setEnabled(bool);
-						rpDownUnreachable.setEnabled(bool);
+						cbpWarning.setEnabled(bool);
+						cbpCritical.setEnabled(bool);
+						cbpDownUnreachable.setEnabled(bool);
+						cbpPollFailure.setEnabled(bool);
 						cbpNotificationAlarmEnabled.setChecked(bool);
 						return false;
 					}
@@ -394,43 +412,6 @@ public class ConfigurationActivity extends PreferenceActivity {
 						return false;
 					}
 				});
-	}
-
-	private String alarmText(String uristr, String def) {
-		if (Settings.System.DEFAULT_RINGTONE_URI.toString().equals(uristr)) {
-			return "Nagroid: " + def;
-		}
-		if (Settings.System.DEFAULT_NOTIFICATION_URI.toString().equals(uristr)) {
-			return "Nagroid: " + def;
-		}
-		if (uristr.length() == 0) {
-			return "(disabled)";
-		}
-
-		return resolvContent(uristr);
-	}
-
-	private String resolvContent(String uristr) {
-		Cursor c = getContentResolver().query(Uri.parse(uristr), null, null,
-				null, null);
-		if (c.getCount() == 0) {
-			return "(Not Found)";
-		}
-		c.moveToFirst();
-
-		String name = "";
-
-		name = c.getString(c.getColumnIndex("title"));
-		if (name != null && name.length() != 0) {
-			return name;
-		}
-
-		name = c.getString(c.getColumnIndex("_display_name"));
-		if (name != null && name.length() != 0) {
-			return name;
-		}
-
-		return "(Not Found)";
 	}
 
 	private String textOrUnset(String text) {

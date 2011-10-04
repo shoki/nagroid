@@ -3,7 +3,6 @@ package de.schoar.nagroid;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import de.schoar.android.helper.http.SSLSelfSigned;
 import de.schoar.extern.Base64;
 import de.schoar.nagroid.nagios.NagiosSite;
@@ -191,48 +190,45 @@ public class ConfigurationAccess {
 				NOTIFICATION_ALARM_ENABLED, bool).commit();
 	}
 
-	public synchronized String getNotificationAlarmWarning() {
-		return mSharedPreferencesPreference.getString(
-				NOTIFICATION_ALARM_WARNING, "");
+	public synchronized boolean getNotificationAlarmWarning() {
+		return mSharedPreferencesPreference.getBoolean(
+				NOTIFICATION_ALARM_WARNING, true);
 	}
 
-	public synchronized void setNotificationAlarmWarning(String uri) {
-		mSharedPreferencesPreference.edit().putString(
-				NOTIFICATION_ALARM_WARNING, uri).commit();
+	public synchronized void setNotificationAlarmWarning(boolean bool) {
+		mSharedPreferencesPreference.edit().putBoolean(
+				NOTIFICATION_ALARM_WARNING, bool).commit();
 	}
 
-	public synchronized String getNotificationAlarmCritical() {
-		return mSharedPreferencesPreference.getString(
-				NOTIFICATION_ALARM_CRITICAL,
-				Settings.System.DEFAULT_RINGTONE_URI.toString());
+	public synchronized boolean getNotificationAlarmCritical() {
+		return mSharedPreferencesPreference.getBoolean(
+				NOTIFICATION_ALARM_CRITICAL, true);
 	}
 
-	public synchronized void setNotificationAlarmCritical(String uri) {
-		mSharedPreferencesPreference.edit().putString(
-				NOTIFICATION_ALARM_CRITICAL, uri).commit();
+	public synchronized void setNotificationAlarmCritical(boolean bool) {
+		mSharedPreferencesPreference.edit().putBoolean(
+				NOTIFICATION_ALARM_CRITICAL, bool).commit();
 	}
 
-	public synchronized String getNotificationAlarmDownUnreachable() {
-		return mSharedPreferencesPreference.getString(
-				NOTIFICATION_ALARM_DOWN_UNREACHABLE,
-				Settings.System.DEFAULT_RINGTONE_URI.toString());
+	public synchronized boolean getNotificationAlarmDownUnreachable() {
+		return mSharedPreferencesPreference.getBoolean(
+				NOTIFICATION_ALARM_DOWN_UNREACHABLE, true);
 	}
 
-	public synchronized void setNotificationAlarmDownUnreachable(String uri) {
-		mSharedPreferencesPreference.edit().putString(
-				NOTIFICATION_ALARM_DOWN_UNREACHABLE, uri).commit();
+	public synchronized void setNotificationAlarmDownUnreachable(boolean bool) {
+		mSharedPreferencesPreference.edit().putBoolean(
+				NOTIFICATION_ALARM_DOWN_UNREACHABLE, bool).commit();
 	}
 	
-	public synchronized String getNotificationAlarmPollFailure() {
-		return mSharedPreferencesPreference.getString(
-				NOTIFICATION_ALARM_POLL_FAILURE,
-				Settings.System.DEFAULT_RINGTONE_URI.toString());
+	public synchronized boolean getNotificationAlarmPollFailure() {
+		return mSharedPreferencesPreference.getBoolean(
+				NOTIFICATION_ALARM_POLL_FAILURE, true);
 	}
 	
 	
-	public synchronized void setNotificationAlarmPollFailure(String uri) {
-		mSharedPreferencesPreference.edit().putString(
-				NOTIFICATION_ALARM_POLL_FAILURE, uri).commit();
+	public synchronized void setNotificationAlarmPollFailure(boolean bool) {
+		mSharedPreferencesPreference.edit().putBoolean(
+				NOTIFICATION_ALARM_POLL_FAILURE, bool).commit();
 	}
 	
 
