@@ -43,7 +43,7 @@ public class HealthNotificationHelper extends NotificationHelper {
 		SoundMap.put(SOUND_CRITICAL, SoundPool.load(ctx, R.raw.critical, 1));
 		SoundMap.put(SOUND_WARNING, SoundPool.load(ctx, R.raw.warning, 1));
 		SoundMap.put(SOUND_HOSTDOWN, SoundPool.load(ctx, R.raw.hostdown,1));
-		//SoundMap.put(SOUND_POLLFAILURE, SoundPool.load(ctx, R.raw.pollfailure,1));
+		SoundMap.put(SOUND_POLLFAILURE, SoundPool.load(ctx, R.raw.pollfailure,1));
 		// TODO: should check that sounds are loaded before playing
 	}
 
