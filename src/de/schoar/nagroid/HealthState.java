@@ -72,8 +72,7 @@ public class HealthState {
 			// alarm, we can't update state, nagios down?
 			if (DM.I.getConfiguration().getPollingEnabled() && DM.I.getConfiguration().getNotificationAlarmEnabled()
 					&& DM.I.getConfiguration().getNotificationAlarmPollFailure()) {
-				// XXX: set to POLLFAILURE 
-				soundId = HealthNotificationHelper.SOUND_HOSTDOWN;
+				soundId = HealthNotificationHelper.SOUND_POLLFAILURE;
 			}
 		}
 		

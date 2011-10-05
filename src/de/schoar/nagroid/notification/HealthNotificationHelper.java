@@ -1,6 +1,7 @@
 package de.schoar.nagroid.notification;
 
 import java.util.HashMap;
+import android.telephony.TelephonyManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.app.Notification;
@@ -28,6 +29,8 @@ public class HealthNotificationHelper extends NotificationHelper {
 	private SoundPool SoundPool;
 	private HashMap<Integer, Integer> SoundMap;
 	
+	private TelephonyManager mTelManager;
+	
 	public static int SOUND_CRITICAL = 1;
 	public static int SOUND_WARNING = 2;
 	public static int SOUND_HOSTDOWN = 3;
@@ -43,8 +46,10 @@ public class HealthNotificationHelper extends NotificationHelper {
 		SoundMap.put(SOUND_CRITICAL, SoundPool.load(ctx, R.raw.critical, 1));
 		SoundMap.put(SOUND_WARNING, SoundPool.load(ctx, R.raw.warning, 1));
 		SoundMap.put(SOUND_HOSTDOWN, SoundPool.load(ctx, R.raw.hostdown,1));
-		//SoundMap.put(SOUND_POLLFAILURE, SoundPool.load(ctx, R.raw.pollfailure,1));
+		SoundMap.put(SOUND_POLLFAILURE, SoundPool.load(ctx, R.raw.pollfailure,1));
 		// TODO: should check that sounds are loaded before playing
+		
+		mTelManager = (TelephonyManager)ctx.getSystemService(Context.TELEPHONY_SERVICE); 
 	}
 
 	public void updateNagiosState(Context ctx, NagiosState stateHost,
@@ -81,7 +86,15 @@ public class HealthNotificationHelper extends NotificationHelper {
 			float actualVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 			float volume = actualVolume / maxVolume;
+			Log.d(LOGT, "music volume="+volume);
+
 			
+			if (mTelManager.getCallState() != 0) {
+				volume /= 3;
+				Log.d(LOGT, "silent mode callstate:"+mTelManager.getCallState()+" volume="+volume);
+			}
+			
+			Integer myInt = mTelManager.getCallState();
 			
 			SoundPool.play(SoundMap.get(hs.getSoundId()), volume, volume, 1, 0, 1f);
 			Log.d(LOGT, "Played sound");
