@@ -88,10 +88,9 @@ public class HealthNotificationHelper extends NotificationHelper {
 			float volume = actualVolume / maxVolume;
 			Log.d(LOGT, "music volume="+volume);
 
-			
-			if (mTelManager.getCallState() != 0) {
+			if (mTelManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
 				volume /= 3;
-				Log.d(LOGT, "silent mode callstate:"+mTelManager.getCallState()+" volume="+volume);
+				Log.d(LOGT, "silent mode callstate:"+mTelManager.getCallState()+" reduced volume="+volume);
 			}
 			
 			Integer myInt = mTelManager.getCallState();
