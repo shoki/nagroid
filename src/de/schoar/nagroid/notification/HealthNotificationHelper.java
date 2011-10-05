@@ -30,6 +30,7 @@ public class HealthNotificationHelper extends NotificationHelper {
 	private HashMap<Integer, Integer> SoundMap;
 	
 	private TelephonyManager mTelManager;
+	private AudioManager audioManager;
 	
 	public static int SOUND_CRITICAL = 1;
 	public static int SOUND_WARNING = 2;
@@ -50,6 +51,7 @@ public class HealthNotificationHelper extends NotificationHelper {
 		// TODO: should check that sounds are loaded before playing
 		
 		mTelManager = (TelephonyManager)ctx.getSystemService(Context.TELEPHONY_SERVICE); 
+		audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 	}
 
 	public void updateNagiosState(Context ctx, NagiosState stateHost,
@@ -82,19 +84,17 @@ public class HealthNotificationHelper extends NotificationHelper {
 		if (DM.I.getConfiguration().getNotificationAlarmEnabled()
 				&& hs.getSoundId() != 0 && !quiet) {
 			
-			AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 			float actualVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 			float volume = actualVolume / maxVolume;
 			Log.d(LOGT, "music volume="+volume);
 
+			// avoid brain damage while talking
 			if (mTelManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
 				volume /= 3;
 				Log.d(LOGT, "silent mode callstate:"+mTelManager.getCallState()+" reduced volume="+volume);
 			}
-			
-			Integer myInt = mTelManager.getCallState();
-			
+						
 			SoundPool.play(SoundMap.get(hs.getSoundId()), volume, volume, 1, 0, 1f);
 			Log.d(LOGT, "Played sound");
 		}
